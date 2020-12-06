@@ -25,11 +25,16 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
 
         binding.glSurfaceView.apply{
+            mRenderer.setColor(255f)
             setEGLContextClientVersion(3)
             setEGLConfigChooser(true)
             setRenderer(mRenderer)
-            //renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
-            requestRender()
+            renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+            //requestRender()
+            setOnClickListener{
+                mRenderer.setColor(g = 255f)
+
+            }
         }
 
     }

@@ -9,20 +9,16 @@ class MyGLSurfaceView(context: Context?, attrs: AttributeSet?) : GLSurfaceView(c
     private val mRender = BackgroundRender()
 
     fun init(){
-        mRender.setColor(1f)
+        mRender.setColor(1f,1f)
         setEGLContextClientVersion(3)
         setEGLConfigChooser(true)
         setRenderer(mRender)
-        renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
-        //requestRender()
+        renderMode = RENDERMODE_CONTINUOUSLY
         setOnClickListener{
             queueEvent{
                 mRender.setColor(g = 1f)
             }
         }
-    }
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        return super.onKeyDown(keyCode, event)
     }
 
 }

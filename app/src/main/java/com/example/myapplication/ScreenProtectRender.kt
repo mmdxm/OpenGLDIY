@@ -9,6 +9,7 @@ import java.nio.FloatBuffer
 import java.util.*
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
+import kotlin.collections.ArrayList
 
 class ScreenProtectRender :  GLSurfaceView.Renderer {
     companion object{
@@ -23,16 +24,15 @@ class ScreenProtectRender :  GLSurfaceView.Renderer {
     private var width = 0
     private var height = 0
 
-    var mProgram :Int = 0
-    var triangleCoords = floatArrayOf(
+    private var mProgram :Int = 0
+    private var triangleCoords = floatArrayOf(
             0f, 1f, 0.0f,  // top
             -1f, 0f, 0.0f,  // bottom left
             1f, 0f, 0.0f// bottom right
     )
 
-    var triangleColor = floatArrayOf(
+    private var triangleColor = floatArrayOf(
             1.0f, 0.0f, 0.0f, 1.0f
-
     ) //白色
 
     private val vertexCount: Int = triangleCoords.size / COORDS_PER_VERTEX
@@ -69,27 +69,27 @@ class ScreenProtectRender :  GLSurfaceView.Renderer {
 
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
         reduceColor()        //将程序加入到OpenGLES2.0环境
-        GLES20.glUseProgram(mProgram);
+        GLES20.glUseProgram(mProgram)
 
         //获取顶点着色器的vPosition成员句柄
-        val mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
+        val mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition")
         //启用三角形顶点的句柄
-        GLES20.glEnableVertexAttribArray(mPositionHandle);
+        GLES20.glEnableVertexAttribArray(mPositionHandle)
         //准备三角形的坐标数据
         GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
                 GLES20.GL_FLOAT, false,
-                vertexStride, vertexBuffer);
+                vertexStride, vertexBuffer)
         //获取片元着色器的vColor成员的句柄
-        val mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
+        val mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor")
         //设置绘制三角形的颜色
-        GLES20.glUniform4fv(mColorHandle, 1, triangleColor, 0);
+        GLES20.glUniform4fv(mColorHandle, 1, triangleColor, 0)
         //绘制三角形
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount)
         //禁止顶点数组的句柄
-        GLES20.glDisableVertexAttribArray(mPositionHandle);
+        GLES20.glDisableVertexAttribArray(mPositionHandle)
 
         for(ele in mElements){
-            ele.draw(gl!!,width,height)
+            ele.draw(gl!!, width, height)
         }
 
     }
@@ -100,10 +100,20 @@ class ScreenProtectRender :  GLSurfaceView.Renderer {
         //if(count % 10 != 0L)
          //    return
 
-        triangleCoords[1] -= 0.01f
+        triangleCoords[1] -= 0.004f
         if(triangleCoords[1] <= 0.0f){
             triangleCoords[1] = 1f
         }
+
+        triangleCoords[3] += 0.004f
+        if(triangleCoords[3] >= 0.0f){
+            triangleCoords[3] = -1f
+        }
+        triangleCoords[6] -= 0.004f
+        if(triangleCoords[6] <= 0.0f){
+            triangleCoords[6] = 1f
+        }
+
         vertexBuffer.put(triangleCoords)
         vertexBuffer.position(0)
 
@@ -131,13 +141,13 @@ class ScreenProtectRender :  GLSurfaceView.Renderer {
         val fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderSource)
 
         //创建一个空的OpenGLES程序
-        mProgram = GLES20.glCreateProgram();
+        mProgram = GLES20.glCreateProgram()
         //将顶点着色器加入到程序
-        GLES20.glAttachShader(mProgram, vertexShader);
+        GLES20.glAttachShader(mProgram, vertexShader)
         //将片元着色器加入到程序中
-        GLES20.glAttachShader(mProgram, fragmentShader);
+        GLES20.glAttachShader(mProgram, fragmentShader)
         //连接到着色器程序
-        GLES20.glLinkProgram(mProgram);
+        GLES20.glLinkProgram(mProgram)
 
     }
 
@@ -148,7 +158,7 @@ class ScreenProtectRender :  GLSurfaceView.Renderer {
         // for a fixed camera, set the projection too
         val  ratio = width.toFloat() / height.toFloat()
         gl?.glMatrixMode(GL10.GL_PROJECTION)
-        gl?.glLoadIdentity();
-        gl?.glFrustumf(-ratio, ratio, -1f, 1f, 1f, 10f);
+        gl?.glLoadIdentity()
+        gl?.glFrustumf(-ratio, ratio, -1f, 1f, 1f, 10f)
     }
 }

@@ -28,7 +28,8 @@ class ScreenProtectRender :  GLSurfaceView.Renderer {
     private var triangleCoords = floatArrayOf(
             0f, 1f, 0.0f,  // top
             -1f, 0f, 0.0f,  // bottom left
-            1f, 0f, 0.0f// bottom right
+            1f, 0f, 0.0f,// bottom right
+            0f,-1f,0f
     )
 
     private var triangleColor = floatArrayOf(
@@ -84,7 +85,7 @@ class ScreenProtectRender :  GLSurfaceView.Renderer {
         //设置绘制三角形的颜色
         GLES20.glUniform4fv(mColorHandle, 1, triangleColor, 0)
         //绘制三角形
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount)
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, vertexCount)
         //禁止顶点数组的句柄
         GLES20.glDisableVertexAttribArray(mPositionHandle)
 
@@ -112,6 +113,12 @@ class ScreenProtectRender :  GLSurfaceView.Renderer {
         triangleCoords[6] -= 0.004f
         if(triangleCoords[6] <= 0.0f){
             triangleCoords[6] = 1f
+        }
+
+
+        triangleCoords[10] += 0.004f
+        if(triangleCoords[10] >= 0.0f){
+            triangleCoords[10] = -1f
         }
 
         vertexBuffer.put(triangleCoords)

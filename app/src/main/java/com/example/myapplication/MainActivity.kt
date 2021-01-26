@@ -15,8 +15,8 @@ class MainActivity : AppCompatActivity() {
 
         binding.glSurfaceView.apply{
             init()
+            requestRender()
         }
-        binding.glSurfaceView.requestRender()
 
     }
 

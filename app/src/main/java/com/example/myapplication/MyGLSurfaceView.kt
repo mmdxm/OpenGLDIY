@@ -4,12 +4,11 @@ import android.opengl.GLSurfaceView
 import android.util.AttributeSet
 
 class MyGLSurfaceView(context: Context?, attrs: AttributeSet?) : GLSurfaceView(context, attrs) {
-    private val mRender = ScreenProtectRender()
 
-    fun init(){
+    fun init(render:Renderer){
         setEGLContextClientVersion(3)
         setEGLConfigChooser(true)
-        setRenderer(mRender)
+        setRenderer(render)
         renderMode = RENDERMODE_CONTINUOUSLY
     }
 
